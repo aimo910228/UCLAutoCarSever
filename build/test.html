@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="/jwplayer/jwplayer.js"></script>
+</head>
+
+<body style="margin:0;padding:0">
+
+    <div id="player">Loading the player...</div>
+
+    <script type="text/javascript">
+
+        var aURL = window.location.href;
+        var streamkey = 'spelunky';
+        if (aURL.indexOf('?') != -1) {
+            streamkey = aURL.slice(aURL.indexOf('?') + 1);
+        }
+
+        jwplayer("player").setup({
+            file: "rtmp://stream.tgs.id.au/livestream/flv:" + streamkey,
+            image: "/spelunky.gif",
+            width: "100%",
+            aspectratio: "16:9",
+            title: "stream.tgs.id.au",
+            rtmp: { bufferlength: 0.2 },
+        });
+    </script>
+
+</body>
+
+</html>
