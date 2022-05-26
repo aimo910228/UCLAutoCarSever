@@ -3,7 +3,7 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const cors = require('cors');
-const mqtt_publish = require("./sever");
+const mqtt_publish = require("./mqttPub");
 const path = require("path");
 var bodyParser = require('body-parser');
 const carLocation = require("./loc");
@@ -46,7 +46,7 @@ const Car = sequelize.define(
 
 
 // 定義一個叫做 Car 的資料結構
-const CarInfo = sequelize.define(
+const InfoCar = sequelize.define(
     // 定義 Model 名字
     'car_info',
     // 定義 Model 屬性
@@ -144,7 +144,7 @@ app.post("/addcarinfo", function (req, res) {
     var reqBody = req.body;
     sequelize.sync().then(() => {
         // 寫入對映欄位名稱的資料內容
-        CarInfo.create({
+        InfoCar.create({
             // 記得 value 字串要加上引號
             timeStep: moment().format("YYYY-MM-DD HH:mm:ss"),
             rawData: reqBody.rawData,
