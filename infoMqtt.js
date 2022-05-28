@@ -1,4 +1,6 @@
+
 function carInfo() {
+
     const moment = require('moment');
     // 引入 sequelize 套件
     const { Sequelize } = require('sequelize');
@@ -33,18 +35,20 @@ function carInfo() {
             modelName: 'carInfo_view',
             freezeTableName: true,
             timestamps: false,
-        });
+        }
+    );
 
+    
     return new Promise((resolve, reject) => {
-        const whitch_info = require('./point')
+        const whitch_info = require('./info')
 
         sequelize.sync().then(() => {
             CarInfoView.findAll({
                 order: [["id", "DESC"]], limit: 1,
             }).then((cars) => {
                 let mytime = cars[0].timeStep;
-                let mylocaltion = cars[0].rawData;
-                whitch_info.whitch_info(JSON.parse(mylocaltion)).then((val) => {
+                let myinfo = cars[0].rawData;
+                whitch_info.whitch_info(JSON.parse(myinfo)).then((val) => {
                     resolve({ "Status": "Ok", "val": val, "time": mytime })
                 });
             }).catch((err) => {

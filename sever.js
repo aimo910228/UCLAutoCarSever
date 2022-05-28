@@ -11,25 +11,17 @@ client.on('connect', function () {
                 console.log("subscribe topic:" + location)
             }
         });
+        const info = "/ucl/battery"
+        client.subscribe(info, function (err) {
+            if (!err) {
+                console.log("subscribe topic:" + info)
+            }
+        });
     } catch (err) {
         console.log("MQTT 訂閱失敗");
         console.log("err:", err);
     }
 });
-
-// client.on('connect', function () {
-//     try {
-//         const info = "ucl/car"
-//         client.subscribe(info, function (err) {
-//             if (!err) {
-//                 console.log("subscribe topic:" + info)
-//             }
-//         });
-//     } catch (err) {
-//         console.log("MQTT 訂閱失敗");
-//         console.log("err:", err);
-//     }
-// });
 
 client.on('message', (topic, message) => {
     try {
@@ -38,9 +30,11 @@ client.on('message', (topic, message) => {
 
         switch (topic) {
             case 'ucl/uwb':
+                console.log('call locAPI')
                 AddLocaltionAPI(msg)
                 break
-            case 'ucl/car':
+            case '/ucl/battery':
+                console.log('call infoAPI')
                 AddInfoAPI(msg)
                 break
 

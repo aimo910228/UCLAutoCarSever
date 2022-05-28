@@ -8,7 +8,8 @@ const path = require("path");
 var bodyParser = require('body-parser');
 const carLocation = require("./loc");
 const carInfo = require("./infoMqtt");
-const moment = require('moment')
+const moment = require('moment');
+const sever = require('./sever');
 
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('demo', 'ucl_yl', 'ucl_YL', {
@@ -16,63 +17,9 @@ const sequelize = new Sequelize('demo', 'ucl_yl', 'ucl_YL', {
     dialect: 'mysql'
 });
 
-// 定義一個叫做 Car 的資料結構
-const Car = sequelize.define(
-    // 定義 Model 名字
-    'demo_shop',
-    // 定義 Model 屬性
-    {
-        "id": {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        "rawData": {
-            type: Sequelize.STRING,
-            defaultValue: "0",
-            // allowNull defaults to true
-        },
-        "timeStep": {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW,
-        }
-    },
-    // 定義 Model 其他選項
-    {
-        modelName: 'demo_shop',
-        freezeTableName: true,
-        timestamps: false,
-    });
 
 
-// 定義一個叫做 Car 的資料結構
-const InfoCar = sequelize.define(
-    // 定義 Model 名字
-    'car_info',
-    // 定義 Model 屬性
-    {
-        "id": {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        "rawData": {
-            type: Sequelize.STRING,
-            defaultValue: "0",
-            // allowNull defaults to true
-        },
-        "timeStep": {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW,
-        }
-    },
-    // 定義 Model 其他選項
-    {
-        modelName: 'car_info',
-        freezeTableName: true,
-        timestamps: false,
-    });
-
+sever
 
 const hostname = 'uclautocar.54ucl.com';
 // const httpport = 8080;
@@ -124,6 +71,34 @@ app.post("/mqtt", function (req, res) {
 });
 
 app.post("/addcarloc", function (req, res) {
+    // 定義一個叫做 Car 的資料結構
+    const Car = sequelize.define(
+        // 定義 Model 名字
+        'demo_shop',
+        // 定義 Model 屬性
+        {
+            "id": {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            "rawData": {
+                type: Sequelize.STRING,
+                defaultValue: "0",
+                // allowNull defaults to true
+            },
+            "timeStep": {
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW,
+            }
+        },
+        // 定義 Model 其他選項
+        {
+            modelName: 'demo_shop',
+            freezeTableName: true,
+            timestamps: false,
+        });
+
     var reqBody = req.body;
     sequelize.sync().then(() => {
         // 寫入對映欄位名稱的資料內容
@@ -141,6 +116,33 @@ app.post("/addcarloc", function (req, res) {
 });
 
 app.post("/addcarinfo", function (req, res) {
+    // 定義一個叫做 InfoCar 的資料結構
+    const InfoCar = sequelize.define(
+        // 定義 Model 名字
+        'car_info',
+        // 定義 Model 屬性
+        {
+            "id": {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            "rawData": {
+                type: Sequelize.STRING,
+                defaultValue: "0",
+                // allowNull defaults to true
+            },
+            "timeStep": {
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW,
+            }
+        },
+        // 定義 Model 其他選項
+        {
+            modelName: 'car_info',
+            freezeTableName: true,
+            timestamps: false,
+        });
     var reqBody = req.body;
     sequelize.sync().then(() => {
         // 寫入對映欄位名稱的資料內容
