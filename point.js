@@ -49,9 +49,7 @@ function whitch_localtion(Data) {
     })
 }
 
-//A座標(ax,ay),A距離：A
-//B座標(bx,by),B距離：B
-//C座標(cx,cy),C距離：C
+//A座標(ax,ay),A距離：A, B座標(bx,by),B距離：B, C座標(cx,cy),C距離：C
 function distance(ax, ay, bx, by, cx, cy, A, B, C) {
     var A = A * 100 - 200;
     var B = B * 100 - 200;

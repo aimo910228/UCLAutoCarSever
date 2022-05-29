@@ -11,13 +11,12 @@ const carInfo = require("./infoMqtt");
 const moment = require('moment');
 const sever = require('./sever');
 
+// 連線資料庫
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('demo', 'ucl_yl', 'ucl_YL', {
     host: '163.18.26.149',
     dialect: 'mysql'
 });
-
-
 
 sever
 
@@ -25,12 +24,12 @@ const hostname = 'uclautocar.54ucl.com';
 // const httpport = 8080;
 const httpsport = 443;
 
+// 讀取網站憑證檔
 const cert = fs.readFileSync('./ssl/sever.pem');
 const key = fs.readFileSync('./ssl/private.key');
 
 const httpsoptions = {
     cert: cert,
-    // ca: ca, 
     key: key
 };
 
@@ -38,7 +37,7 @@ const app = express();
 // const httpServer = http.createServer(app);
 const httpsServer = https.createServer(httpsoptions, app);
 
-
+// http自動轉址
 // app.use((req, res, next) => {
 //     if (req.protocol === 'http') {
 //         res.redirect(301, `https://${hostname}${req.url}`);
@@ -77,6 +76,7 @@ app.post("/addcarloc", function (req, res) {
         'demo_shop',
         // 定義 Model 屬性
         {
+            // allowNull defaults to true
             "id": {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -85,7 +85,6 @@ app.post("/addcarloc", function (req, res) {
             "rawData": {
                 type: Sequelize.STRING,
                 defaultValue: "0",
-                // allowNull defaults to true
             },
             "timeStep": {
                 type: Sequelize.DATE,
@@ -112,15 +111,13 @@ app.post("/addcarloc", function (req, res) {
         }).catch((err) => {
             console.log(err)
         });
-    });
+    }
+    );
 });
 
 app.post("/addcarinfo", function (req, res) {
-    // 定義一個叫做 InfoCar 的資料結構
     const InfoCar = sequelize.define(
-        // 定義 Model 名字
         'car_info',
-        // 定義 Model 屬性
         {
             "id": {
                 type: Sequelize.INTEGER,
@@ -130,19 +127,18 @@ app.post("/addcarinfo", function (req, res) {
             "rawData": {
                 type: Sequelize.STRING,
                 defaultValue: "0",
-                // allowNull defaults to true
             },
             "timeStep": {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.NOW,
             }
         },
-        // 定義 Model 其他選項
         {
             modelName: 'car_info',
             freezeTableName: true,
             timestamps: false,
-        });
+        }
+    );
     var reqBody = req.body;
     sequelize.sync().then(() => {
         // 寫入對映欄位名稱的資料內容
@@ -157,17 +153,6 @@ app.post("/addcarinfo", function (req, res) {
             console.log(err)
         });
     });
-});
-
-app.post("/submqtt", function (req, res) {
-    try {
-        // console.log(typeof req.body.message); // string
-        console.log(req.body.topic);
-        // mqtt_publish.mqtt_publish(req.body.topic);
-        res.json(mqtt_publish.mqtt_publish(req.body.topic));
-    } catch (error) {
-        console.log(error);
-    }
 });
 
 app.post("/carlocate", function (req, res) {
@@ -185,6 +170,17 @@ app.post("/carinfo", function (req, res) {
         carInfo.carInfo().then((data) => {
             res.json(data)
         });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+app.post("/submqtt", function (req, res) {
+    try {
+        // console.log(typeof req.body.message); // string
+        console.log(req.body.topic);
+        // mqtt_publish.mqtt_publish(req.body.topic);
+        res.json(mqtt_publish.mqtt_publish(req.body.topic));
     } catch (error) {
         console.log(error);
     }

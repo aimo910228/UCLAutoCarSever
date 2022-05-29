@@ -1,15 +1,13 @@
 
 function carInfo() {
-
-    const moment = require('moment');
     // 引入 sequelize 套件
     const { Sequelize } = require('sequelize');
 
     // 透過 new 建立 Sequelize 這個 class，而 sequelize 就是物件 instance
-    const sequelize = new Sequelize('demo', 'ucl_yl', 'ucl_YL', {
-        host: '163.18.26.149',
-        dialect: 'mysql'
-    });
+    const sequelize = new Sequelize(
+        'demo', 'ucl_yl', 'ucl_YL',
+        { host: '163.18.26.149', dialect: 'mysql' }
+    );
 
     const CarInfoView = sequelize.define(
         // 定義 Model 名字
@@ -38,7 +36,6 @@ function carInfo() {
         }
     );
 
-    
     return new Promise((resolve, reject) => {
         const whitch_info = require('./info')
 
